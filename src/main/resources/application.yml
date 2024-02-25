@@ -1,0 +1,57 @@
+#ServerConnection
+MYSQL_USERNAME: root
+MYSQL_PASSWORD: 123456
+MYSQL_HOST: localhost
+MYSQL_PORT: 3306
+MYSQL_DATABASE: backio
+#ServerConfiguration
+CONTAINER_PORT: 8080
+ACTIVE_PROFILE: dev
+
+
+
+
+jwt:
+    secret: mySuperComplexSecret
+#    ${JWT_SECRET}
+server:
+    profiles:
+        active: ${ACTIVE_PROFILE:dev}
+    error:
+        path: /user/error
+        whitelabel:
+            enabled: false
+    port: ${CONTAINER_PORT:8080}
+spring:
+    autoconfigure:
+        exclude:  org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+    datasource:
+        url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}
+        username: ${MYSQL_USERNAME}
+        password: ${MYSQL_PASSWORD}
+
+    jpa:
+        database-platform: org.hibernate.dialect.MySQL8InnoDBDialect
+        generate-ddl: true
+        show-sql: true
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                globally_quoted_indentifiers: true
+                dialect: org.hibernate.dialect.MySQLDialect
+                format_sql: true
+    sql:
+        init:
+            mode: always
+            continue-on-error: false
+
+vi:
+    app:
+        url: ${UI_APP_URL}
+
+application:
+    title: backio
+    version: 1.0
+
+
