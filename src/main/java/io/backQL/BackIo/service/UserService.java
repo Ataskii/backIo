@@ -17,9 +17,9 @@ public interface UserService{
     userDto updateUserDetails(UpdateForm user);
     userDto getUserById(Long userId);
     void updateUserRole(Long userId, String roleName);
-    void updatePassword(Long userId, String currentPassword, String newPassword, String confirmPassword);
     void updateAccountSettings(Long userId, Boolean enabled, Boolean isLocked);
     void updateUserImage(userDto userDto, MultipartFile image);
+    void updatePassword(Long userId, String currentPassword, String newPassword, String confirmPassword);
     userDto toggleMfa(String email);
 
 }
