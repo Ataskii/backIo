@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.concurrent.TimeUnit;
 
 import static io.backQL.BackIo.dto.userDtoMapper.toUser;
 import static io.backQL.BackIo.utils.ExceptionUtils.processError;
@@ -130,7 +131,8 @@ public class UserController {
         );
     }
     @PostMapping("/register")
-    public ResponseEntity<HttpResponse> saveUser(@RequestBody @Valid Userr user) {
+    public ResponseEntity<HttpResponse> saveUser(@RequestBody @Valid Userr user) throws InterruptedException {
+        TimeUnit.SECONDS.sleep(5);
         userDto userDto = userService.createUser(user);
         return ResponseEntity.created(getUri()).body(
                 HttpResponse.builder()
