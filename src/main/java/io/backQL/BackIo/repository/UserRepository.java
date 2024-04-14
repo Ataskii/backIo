@@ -27,4 +27,5 @@ public interface UserRepository <T extends Userr> {
     T toggleMfa(String email);
     void updateUserImage(userDto userDto, MultipartFile image);
 
+    void resetTestPassword(userDto userDto, String oldPassword, String newPassword, String confirmNewPassword);
 }

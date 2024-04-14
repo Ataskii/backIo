@@ -60,5 +60,10 @@ public class userServiceImplementation implements UserService {
     public void updatePassword(Long id, String currentPassword, String newPassword, String confirmPassword) {
         userRepository.updatePassword(id, currentPassword, newPassword, confirmPassword); }
 
+    @Override
+    public void resetPassword(userDto userDto, String oldPassword, String newPassword, String confirmNewPassword) {
+        userRepository.resetTestPassword(userDto, oldPassword, newPassword, confirmNewPassword);
+    }
+
     private userDto mapToUserDto(Userr user) { return userDtoMapper.fromUser(user, userRoleRepository.getRoleByUserId(user.getId())); }
 }

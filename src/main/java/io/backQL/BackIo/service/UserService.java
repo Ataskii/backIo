@@ -18,8 +18,10 @@ public interface UserService{
     userDto getUserById(Long userId);
     void updateUserRole(Long userId, String roleName);
     void updateAccountSettings(Long userId, Boolean enabled, Boolean isLocked);
-    void updateUserImage(userDto userDto, MultipartFile image);
     void updatePassword(Long userId, String currentPassword, String newPassword, String confirmPassword);
+    void updateUserImage(userDto userDto, MultipartFile image);
+    void resetPassword(userDto userDto, String oldPassword, String newPassword, String confirmNewPassword);
+
     userDto toggleMfa(String email);
 
 }
