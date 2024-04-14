@@ -82,7 +82,6 @@ public class UserRepositoryImplementation implements UserRepository<Userr>, User
             throw new ApiException("An error occurred, Please try again.");
         }
     }
-
     @Override
     public Collection<Userr> list(int page, int pageSize) {
         return null;
@@ -265,6 +264,16 @@ its not gonna return any null exception so second option its more safe i guess *
         jdbc.update(UPDATE_PROFILE_PICTURE_QUERY, Map.of("id", userDto.getId(), "image", url));
     }
 
+    @Override
+    public void resetTestPassword(userDto userDto, String oldPassword, String newPassword, String confirmNewPassword) {
+        Userr user = getUserByEmail(userDto.getEmail());
+        if (!encoder.matches(oldPassword, user.getPassword())) {
+            throw new ApiException("Wrong password. Please try again");
+        } else { if (!newPassword.equals(confirmNewPassword)) {
+            throw new ApiException("Passwords are not matching, Please try again.");
+        } else { jdbc.update(UPDATE_PASSWORD_QUERY, Map.of("newPassword", encoder.encode(newPassword),"id", user.getId())); }
+        }
+    }
 
     private String setImageUrl(String email) {
         return ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/image/" + email + ".png").toUriString();

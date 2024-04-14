@@ -7,10 +7,7 @@ import io.backQL.BackIo.dto.userDto;
 import io.backQL.BackIo.enumeration.EventType;
 import io.backQL.BackIo.event.NewUserEvent;
 import io.backQL.BackIo.exception.ApiException;
-import io.backQL.BackIo.form.LoginForm;
-import io.backQL.BackIo.form.SettingsForm;
-import io.backQL.BackIo.form.UpdateForm;
-import io.backQL.BackIo.form.UpdatePasswordForm;
+import io.backQL.BackIo.form.*;
 import io.backQL.BackIo.provider.TokenProvider;
 import io.backQL.BackIo.service.RoleService;
 import io.backQL.BackIo.service.UserService;
@@ -198,18 +195,19 @@ public class UserController {
                         .build()
         );
     }
-    @PostMapping("/resetpassword/{key}/{newpassword}/{confirmpassword}")
-    public ResponseEntity<HttpResponse> verifynewpasswordurl(@PathVariable("key") String key, @PathVariable("newpassword") String newPassword, @PathVariable("confirmpassword") String confirmPassword) {
-        userService.renewPassword(key, newPassword, confirmPassword);
-        return ResponseEntity.ok().body(
-                HttpResponse.builder()
-                        .timeStamp(now().toString())
-                        .message("Passport reset successful.")
-                        .status(HttpStatus.OK)
-                        .statusCode(HttpStatus.OK.value())
-                        .build()
-        );
-    }
+//    @PostMapping("/resetpassword/{key}/{newpassword}/{confirmpassword}")
+//    public ResponseEntity<HttpResponse> verifyNewPasswordUrl(@PathVariable("key") String key, @PathVariable("newpassword") String newPassword, @PathVariable("confirmpassword") String confirmPassword) {
+//        userService.renewPassword(key, newPassword, confirmPassword);
+//        return ResponseEntity.ok().body(
+//                HttpResponse.builder()
+//                        .timeStamp(now().toString())
+//                        .message("Passport reset successful.")
+//                        .status(HttpStatus.OK)
+//                        .statusCode(HttpStatus.OK.value())
+//                        .build()
+//        );
+//    }
+
     @GetMapping("/verify/code/{email}/{code}")
     public ResponseEntity<HttpResponse> verifyCode(@PathVariable("email") String email, @PathVariable("code") String code) {
         userDto user = userService.verifyCode(email, code);
@@ -218,8 +216,8 @@ public class UserController {
                 HttpResponse.builder()
                         .timeStamp(now().toString())
                         .data(of("user", user,
-                                "token_Refresh", tokenProvider.createRefreshToken(getUserPrinciple(user)),
-                                "token_Access", tokenProvider.createAccessToken(getUserPrinciple(user))))
+                                 "token_Refresh", tokenProvider.createRefreshToken(getUserPrinciple(user)),
+                                 "token_Access", tokenProvider.createAccessToken(getUserPrinciple(user))))
                         .message("Login success")
                         .status(HttpStatus.OK)
                         .statusCode(HttpStatus.OK.value())
@@ -313,6 +311,19 @@ public class UserController {
                         .message("Profile image updated")
                         .status(OK)
                         .statusCode(OK.value())
+                        .build()
+        );
+    }
+    @PostMapping("/resetpassword/new")
+    public ResponseEntity<HttpResponse> resetPassword(Authentication authentication, @RequestBody @Valid ResetPasswordForm form) {
+        userDto user = userService.getUserById(getAuthenticatedUserReturnUserDto(authentication).getId());
+        userService.resetPassword(user, form.oldPassword, form.newPassword, form.confirmNewPassword);
+        return ResponseEntity.ok().body(
+                HttpResponse.builder()
+                        .timeStamp(now().toString())
+                        .message("Password reset successful.")
+                        .status(HttpStatus.OK)
+                        .statusCode(HttpStatus.OK.value())
                         .build()
         );
     }
