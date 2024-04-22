@@ -62,24 +62,6 @@ public class UserController {
         return user.getIsUsingMfa() ? sendVarificationUrl(user) : sendResponse(user);
 }
 
-//    @PostMapping("/logout")
-//    public ResponseEntity<HttpResponse> breakToken(@RequestBody @Valid LoginForm loginForm) {
-//        Authentication authentication = authenticate(loginForm.getEmail(), loginForm.getPassword().toString());
-//        userDto user = getAuthenticatedUserReturnUserDto(authentication);
-//        TokenProvider.breakToken(user.getId());
-//        return ResponseEntity.ok().body(
-//                HttpResponse.builder()
-//                        .timeStamp(now().toString())
-//                        .message("Successfully logged out.")
-//                        .status(OK)
-//                        .statusCode(OK.value())
-//                        .build()
-//        );
-//    }
-
-//    private userDto getAuthenticatedUser(Authentication authentication) {
-//        return ((userDto) authentication.getPrincipal()); // using userDto here other than UserPrincipal can be security leak, will check that later
-//    }
     private userDto authenticate(String email, String password) {
         try {
             if (null != userService.getUserByEmail(email)) {
